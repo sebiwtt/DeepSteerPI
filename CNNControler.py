@@ -18,7 +18,12 @@ camera.resolution = (640, 480)
 
 try:
     while True:
-        # Simulate receiving steering angle from CNN
+        # Simulate receiving steering angle from CNN (Pseudocode)
+        # 
+        # image = camera.capture()
+        # steering_angle = CNNModel.predict(image)
+        #
+
         steering_angle = random.uniform(-1, 1)  # Replace this with actual CNN output
 
         left_motor_speed = left_speed + steering_angle              # Calculate motor speeds based on joystick inputs
