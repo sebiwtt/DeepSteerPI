@@ -3,13 +3,24 @@ import random   # Simulate CNN input
 from datetime import datetime
 from picamera import PiCamera
 import L298NHBridge as HBridge
+import tensorflow as tf
+import numpy as np
+from PIL import Image
 
 # Helper to make talking to the motors easy
 def set_motor_speeds(left_speed, right_speed):
     HBridge.setMotorLeft(left_speed)
     HBridge.setMotorRight(right_speed)
 
+def preprocess_image(image):
+    img = Image.fromarray(image)
+    img = img.resize((64, 64))
+    img = np.array(img)
+    img = img / 255.0  # Normalize the image
+    return img
+
 # Initialize variables
+model = tf.keras.models.load_model('cnn_steering_model.h5')
 collecting_data = True
 base_speed = 0.5    # Fixed base speed
 steering_angle = 0
@@ -18,13 +29,13 @@ camera.resolution = (640, 480)
 
 try:
     while True:
-        # Simulate receiving steering angle from CNN (Pseudocode)
-        # 
-        # image = camera.capture()
-        # steering_angle = CNNModel.predict(image)
-        #
+        image = np.empty((480, 640, 3), dtype=np.uint8)
+        camera.capture(image, 'rgb')
 
-        steering_angle = random.uniform(-1, 1)  # Replace this with actual CNN output
+        preprocessed_image = preprocess_image(image)
+        preprocessed_image = np.expand_dims(preprocessed_image, axis=0)  # Add batch dimension
+        
+        steering_angle = model.predict(preprocessed_image)[0][0]
 
         left_motor_speed = left_speed + steering_angle              # Calculate motor speeds based on joystick inputs
         right_motor_speed = left_speed - steering_angle
