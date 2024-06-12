@@ -44,9 +44,12 @@ try:
                 HBridge.exit()
             
             if event.ev_type == "Absolute":
+                print("ABS")
                 if event.code == "ABS_Y":                   # Left joystick vertical
+                    print("left")
                     left_speed = -event.state / 32767       # Normalize 
                 elif event.code == "ABS_X":                 # Right joystick horizontal
+                    print("right")
                     steering_angle = event.state / 32767   
 
             left_motor_speed = left_speed + steering_angle              # Calculate motor speeds based on joystick inputs
