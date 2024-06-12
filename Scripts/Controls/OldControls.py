@@ -69,7 +69,7 @@ def collect_data():
             timestamp = datetime.now().strftime('%Y%m%d_%H%M%S%f')
             image_path = f'training_data/{timestamp}.jpg'
             picam2.capture_file(image_path)
-            csv_writer.writerow([timestamp, image_path, speed, steering_angle])
+            #csv_writer.writerow([timestamp, image_path, speed, steering_angle])
             time.sleep(0.1)  # Adjust the sleep duration as necessary
         else:
             time.sleep(0.01)
