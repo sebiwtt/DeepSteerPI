@@ -25,7 +25,7 @@ io.setmode(io.BCM)
 # Autos besser zurechtzukommen. Soll das Roboter-Auto schneller 
 # fahren, kann hier der Wert von 70 % auf maximal 100 % gesetzt werden.
 
-DC_MAX = 70
+DC_MAX = 90
 # Mit dem folgenden Aufruf werden Warnungen deaktiviert, die die 
 # Klasse RPi.GPIO eventuell ausgibt.
 io.setwarnings(False)

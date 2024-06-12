@@ -10,6 +10,32 @@ def set_motor_speeds(left_speed, right_speed):
     HBridge.setMotorLeft(left_speed)
     HBridge.setMotorRight(right_speed)
 
+def control_robot(left_stick, right_stick):
+    # Define dead zone
+    dead_zone = 0.1
+    
+    # Apply dead zone
+    if abs(left_stick) < dead_zone:
+        left_stick = 0
+    if abs(right_stick) < dead_zone:
+        right_stick = 0
+
+    # Exponential response for precision control
+    exponent = 2
+    left_stick = left_stick ** exponent if left_stick >= 0 else -(abs(left_stick) ** exponent)
+    right_stick = right_stick ** exponent if right_stick >= 0 else -(abs(right_stick) ** exponent)
+
+    # Calculate the raw motor speeds
+    left_motor_speed = left_stick + right_stick
+    right_motor_speed = left_stick - right_stick
+
+    # Normalize the motor speeds
+    left_motor_speed = normalize(left_motor_speed)
+    right_motor_speed = normalize(right_motor_speed)
+
+    # Set the motor speeds using the HBridge interface
+    set_motor_speeds(left_motor_speed, right_motor_speed)
+
 if not os.path.exists('training_data'):
     os.makedirs('training_data')
 
@@ -44,29 +70,19 @@ try:
             if event.ev_type == "Absolute":
 
                 if event.code == "ABS_Y":        
-                    speed = -(event.state - 128) / 127   # Normalize to range [-1, 1]
-                    #print(f"Speed: {speed}") 
+                    left_stick = -(event.state - 128) / 127   # Normalize to range [-1, 1]
 
                 elif event.code == "ABS_RX":                
-                    steering_angle = (event.state - 128) / 127  # Normalize to range [-1, 1]
-                    #print(f"Steering angle: {steering_angle}")
+                    right_stick = (event.state - 128) / 127  # Normalize to range [-1, 1]
 
-            left_motor_speed = speed + steering_angle              # Calculate motor speeds based on joystick inputs
-            right_motor_speed = speed - steering_angle
-
-            left_motor_speed = max(min(left_motor_speed, 1.0), -1.0)    # Capping Motor-Speed at -1 and 1 
-            right_motor_speed = max(min(right_motor_speed, 1.0), -1.0)
-
-            set_motor_speeds(left_motor_speed, right_motor_speed)       # Transmit speeds to HBridge Module
-            #print(f"RightSpeed: {right_motor_speed}") 
-            #print(f"LeftSpeed: {left_motor_speed}") 
+            control_robot(left_stick, right_stick) 
 
             if collecting_data:
                 timestamp = datetime.now().strftime('%Y%m%d_%H%M%S%f')
                 image_path = f'training_data/{timestamp}.jpg'
                 picam2.capture_file(image_path)
                 print(f"Saved image under {image_path}")
-                csv_writer.writerow([timestamp, image_path, speed, steering_angle])
+                csv_writer.writerow([timestamp, image_path, left_stick, right_stick])
                 time.sleep(0.1)  # Adjust the sleep duration as necessary 
 
 except KeyboardInterrupt:
