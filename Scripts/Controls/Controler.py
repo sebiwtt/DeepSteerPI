@@ -119,12 +119,16 @@ try:
         else:
             base_speed = left_trigger + right_trigger
 
-        # Calculate the steering adjustment
-        steering_adjustment = left_joystick_x * 0.5  # Scale steering
+       # Calculate the steering adjustment
+        steering_adjustment = abs(left_joystick_x) * 0.5  # Scale steering and ensure it's always additive
 
-        # Calculate the motor speeds
-        left_motor_speed = base_speed + steering_adjustment
-        #right_motor_speed = base_speed - steering_adjustment
+        # Adjust the motor speeds
+        if left_joystick_x >= 0:  # Turning right
+            left_motor_speed = base_speed + steering_adjustment
+            right_motor_speed = base_speed
+        else:  # Turning left
+            left_motor_speed = base_speed
+            right_motor_speed = base_speed + steering_adjustment
 
         # Normalize motor speeds to be within -1 to 1
         left_motor_speed = max(min(left_motor_speed, 1), -1)
