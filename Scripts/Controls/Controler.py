@@ -55,9 +55,8 @@ def get_gamepad_data():
     left_joystick_x = 0
 
     for event in events:
-        if event.ev_type == 'Absolute':
 
-            if event.ev_type == "Key" and event.code == "BTN_SOUTH" and event.state == 1:  # X-Button
+        if event.ev_type == "Key" and event.code == "BTN_SOUTH" and event.state == 1:  # X-Button
                 collecting_data = not collecting_data
                 if collecting_data:
                     print("Data collection started")
@@ -67,6 +66,8 @@ def get_gamepad_data():
             elif event.ev_type == "Key" and event.code == "BTN_WEST" and event.state == 1: # Square-Button
                 print("Exiting") 
                 running = False
+
+        if event.ev_type == 'Absolute':
 
             elif event.code == 'ABS_Z':  # Left trigger
                 left_trigger_value = normalize_trigger(event.state, False)
