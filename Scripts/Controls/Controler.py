@@ -77,7 +77,7 @@ def get_gamepad_data():
 
             elif event.code == 'ABS_RZ':  # Right trigger
                 right_trigger_value = normalize_trigger(event.state, True)
-                #print(right_trigger_value)
+                print(right_trigger_value)
 
             elif event.code == 'ABS_X':  # Left joystick X axis
                 left_joystick_x = normalize_joystick(event.state)
@@ -105,7 +105,7 @@ def control_robot():
     left_motor_speed = max(min(left_motor_speed, 1), -1)
     right_motor_speed = max(min(right_motor_speed, 1), -1)
 
-    #print(f'Left Motor: {left_motor_speed}, Right Motor: {right_motor_speed}')
+    print(f'Left Motor: {left_motor_speed}, Right Motor: {right_motor_speed}')
 
 
     # Set the motor speeds using the HBridge interface
