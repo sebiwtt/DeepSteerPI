@@ -44,8 +44,8 @@ csv_writer = csv.writer(csv_file)
 csv_writer.writerow(['timestamp', 'image_path', 'left_speed', 'right_speed', 'steering_angle'])
 
 collecting_data = False
-speed = 0
-steering_angle = 0
+left_stick = 0
+right_stick = 0
 running = True
 
 picam2 = Picamera2()
