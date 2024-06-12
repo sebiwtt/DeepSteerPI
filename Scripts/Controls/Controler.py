@@ -67,7 +67,7 @@ def get_gamepad_data():
             elif event.ev_type == "Key" and event.code == "BTN_WEST" and event.state == 1: # Square-Button
                 running = False
 
-            if event.code == 'ABS_Z':  # Left trigger
+            elif event.code == 'ABS_Z':  # Left trigger
                 left_trigger_value = normalize_trigger(event.state, False)
                 print(left_trigger_value)
 
@@ -101,8 +101,11 @@ def control_robot():
     left_motor_speed = max(min(left_motor_speed, 1), -1)
     right_motor_speed = max(min(right_motor_speed, 1), -1)
 
+    print(f'Left Motor: {left_motor_speed}, Right Motor: {right_motor_speed}')
+
+
     # Set the motor speeds using the HBridge interface
-    set_motor_speeds(left_motor_speed, right_motor_speed)
+    #set_motor_speeds(left_motor_speed, right_motor_speed)
 
     # For debugging purposes
     #print(f'Base Speed: {base_speed}, Steering: {left_joystick_x}')
