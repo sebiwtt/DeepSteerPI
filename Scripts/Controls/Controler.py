@@ -137,7 +137,7 @@ try:
         print(f'Left Motor: {left_motor_speed}, Right Motor: {right_motor_speed}')
 
         # Set the motor speeds using the HBridge interface
-        #set_motor_speeds(left_motor_speed, right_motor_speed)
+        set_motor_speeds(left_motor_speed, right_motor_speed)
 
         # For debugging purposes
         #print(f'Base Speed: {base_speed}, Steering: {left_joystick_x}')
