@@ -48,7 +48,7 @@ def set_motor_speeds(left_speed, right_speed):
     HBridge.setMotorLeft(left_speed)
     HBridge.setMotorRight(right_speed)
 
-def get_gamepad_data(last_left_trigger=0, last_right_trigger=0)::
+def get_gamepad_data(last_left_trigger=0, last_right_trigger=0):
     events = get_gamepad()
     left_trigger_value = last_left_trigger
     right_trigger_value = last_right_trigger
