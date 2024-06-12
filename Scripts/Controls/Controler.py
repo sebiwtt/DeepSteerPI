@@ -83,6 +83,12 @@ try:
                 elif event.code == "ABS_RX":                
                     right_stick = (event.state - 128) / 127  # Normalize to range [-1, 1]
 
+                elif event.code == 'ABS_Z':  # Left trigger
+                    print(f'Left Trigger: {event.state}')
+
+                elif event.code == 'ABS_RZ':  # Right trigger
+                    print(f'Right Trigger: {event.state}')
+
             control_robot(left_stick, right_stick) 
 
             if collecting_data:
