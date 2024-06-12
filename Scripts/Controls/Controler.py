@@ -57,7 +57,7 @@ def get_gamepad_data():
     for event in events:
 
         if event.ev_type == "Key" and event.code == "BTN_SOUTH" and event.state == 1:  # X-Button
-                global collecting_data = not global collecting_data
+                global collecting_data = not (global collecting_data)
                 if collecting_data:
                     print("Data collection started")
                 else:
