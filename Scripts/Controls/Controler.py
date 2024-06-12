@@ -45,11 +45,11 @@ try:
 
                 if event.code == "ABS_Y":        
                     speed = -(event.state - 128) / 127   # Normalize to range [-1, 1]
-                    print(f"Speed: {speed}") 
+                    #print(f"Speed: {speed}") 
 
                 elif event.code == "ABS_X":                
                     steering_angle = (event.state - 128) / 127  # Normalize to range [-1, 1]
-                    print(f"Steering angle: {steering_angle}")
+                    #print(f"Steering angle: {steering_angle}")
 
             left_motor_speed = speed + steering_angle              # Calculate motor speeds based on joystick inputs
             right_motor_speed = speed - steering_angle
@@ -58,6 +58,8 @@ try:
             right_motor_speed = max(min(right_motor_speed, 1.0), -1.0)
 
             set_motor_speeds(left_motor_speed, right_motor_speed)       # Transmit speeds to HBridge Module
+            #print(f"RightSpeed: {right_motor_speed}") 
+            #print(f"LeftSpeed: {left_motor_speed}") 
 
             # Capture and save image, write log-data to csv
             if collecting_data:
