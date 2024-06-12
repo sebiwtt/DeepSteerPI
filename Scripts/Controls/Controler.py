@@ -58,8 +58,8 @@ try:
             right_motor_speed = max(min(right_motor_speed, 1.0), -1.0)
 
             set_motor_speeds(left_motor_speed, right_motor_speed)       # Transmit speeds to HBridge Module
-            #print(f"RightSpeed: {right_motor_speed}") 
-            #print(f"LeftSpeed: {left_motor_speed}") 
+            print(f"RightSpeed: {right_motor_speed}") 
+            print(f"LeftSpeed: {left_motor_speed}") 
 
             # Capture and save image, write log-data to csv
             if collecting_data:
