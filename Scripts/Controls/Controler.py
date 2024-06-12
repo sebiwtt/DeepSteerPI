@@ -44,14 +44,13 @@ try:
             if event.ev_type == "Absolute":
 
                 if event.code == "ABS_Y": 
-                    print(event.code)                       # Left joystick vertical
-                    print(event.state)
-                    speed = -event.state / 32767   
+                    if event.code == "ABS_Y":                 
+                    speed = -(event.state - 128) / 127   # Normalize to range [-1, 1]
+                    print(f"Speed: {speed}") 
 
-                elif event.code == "ABS_X":                 # Right joystick horizontal
-                    print(event.code)                
-                    print(event.state)
-                    steering_angle = event.state / 32767   
+                elif event.code == "ABS_X":                
+                    steering_angle = (event.state - 128) / 127  # Normalize to range [-1, 1]
+                    print(f"Steering angle: {steering_angle}")
 
             left_motor_speed = speed + steering_angle              # Calculate motor speeds based on joystick inputs
             right_motor_speed = speed - steering_angle
