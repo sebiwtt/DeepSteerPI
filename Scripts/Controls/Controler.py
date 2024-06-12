@@ -124,7 +124,7 @@ try:
 
         # Calculate the motor speeds
         left_motor_speed = base_speed + steering_adjustment
-        right_motor_speed = base_speed - steering_adjustment
+        #right_motor_speed = base_speed - steering_adjustment
 
         # Normalize motor speeds to be within -1 to 1
         left_motor_speed = max(min(left_motor_speed, 1), -1)
