@@ -47,7 +47,7 @@ try:
                     speed = -(event.state - 128) / 127   # Normalize to range [-1, 1]
                     #print(f"Speed: {speed}") 
 
-                elif event.code == "ABS_X":                
+                elif event.code == "ABS_RX":                
                     steering_angle = (event.state - 128) / 127  # Normalize to range [-1, 1]
                     #print(f"Steering angle: {steering_angle}")
 
