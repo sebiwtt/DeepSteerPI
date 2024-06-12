@@ -58,13 +58,14 @@ try:
             right_motor_speed = max(min(right_motor_speed, 1.0), -1.0)
 
             set_motor_speeds(left_motor_speed, right_motor_speed)       # Transmit speeds to HBridge Module
-            print(f"RightSpeed: {right_motor_speed}") 
-            print(f"LeftSpeed: {left_motor_speed}") 
+            #print(f"RightSpeed: {right_motor_speed}") 
+            #print(f"LeftSpeed: {left_motor_speed}") 
 
             if collecting_data:
                 timestamp = datetime.now().strftime('%Y%m%d_%H%M%S%f')
                 image_path = f'training_data/{timestamp}.jpg'
                 picam2.capture_file(image_path)
+                print(f"Saved image under {image_path}")
                 csv_writer.writerow([timestamp, image_path, speed, steering_angle])
                 time.sleep(0.1)  # Adjust the sleep duration as necessary 
 
