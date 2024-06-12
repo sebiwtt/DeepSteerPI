@@ -24,7 +24,7 @@ def collect_data():
     picam2.capture_file(image_path)
     print(f"Saved image under {image_path}")
     #csv_writer.writerow([timestamp, image_path, left_stick, right_stick])
-    time.sleep(0.1)  # Adjust the sleep duration as necessary 
+    #time.sleep(0.1)  # Adjust the sleep duration as necessary 
 
 def normalize_trigger(value):
     normalized_value = value / 255.0
