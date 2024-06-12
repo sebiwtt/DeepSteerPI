@@ -39,18 +39,17 @@ try:
                     print("Data collection stopped")
 
             elif event.ev_type == "Key" and event.code == "BTN_WEST" and event.state == 1: # Square-Button
-                HBridge.setMotorLeft(0)
-                HBridge.setMotorRight(0)
-                HBridge.exit()
+                break
             
             if event.ev_type == "Absolute":
                 #print("ABS")
                 if event.code == "ABS_Y": 
-                    print(event.code)                  # Left joystick vertical
+                    print(event.code)                       # Left joystick vertical
                     print(event.state)
-                    left_speed = -event.state / 32767       # Normalize 
+                    left_speed = -event.state / 32767       
                 elif event.code == "ABS_X":                 # Right joystick horizontal
-                    #print("right")
+                    print(event.code)                
+                    print(event.state)
                     steering_angle = event.state / 32767   
 
             left_motor_speed = left_speed + steering_angle              # Calculate motor speeds based on joystick inputs
