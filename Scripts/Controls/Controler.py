@@ -53,19 +53,17 @@ try:
 
 
             # Calculate motor speeds based on joystick inputs
-            left_motor_speed = speed + steering_angle
-            right_motor_speed = speed - steering_angle
-
-
-            # Apply a steering factor to blend speed and steering more effectively
-            left_motor_speed = speed * (1 - abs(steering_angle)) + steering_angle
-            right_motor_speed = speed * (1 - abs(steering_angle)) - steering_angle
+            if speed != 0:
+                left_motor_speed = speed * (1 - abs(steering_angle)) + steering_angle * speed
+                right_motor_speed = speed * (1 - abs(steering_angle)) - steering_angle * speed
+            else:
+                left_motor_speed = steering_angle
+                right_motor_speed = -steering_angle
 
             left_motor_speed = max(min(left_motor_speed, 1.0), -1.0)
             right_motor_speed = max(min(right_motor_speed, 1.0), -1.0)
 
             set_motor_speeds(left_motor_speed, right_motor_speed)  # Transmit speeds to HBridge Module
-
 
             # Normalize speeds to maintain consistent total speed
             #max_speed = max(abs(left_motor_speed), abs(right_motor_speed))
