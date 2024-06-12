@@ -51,35 +51,13 @@ try:
                     steering_angle = (event.state - 128) / 127  # Normalize to range [-1, 1]
                     #print(f"Steering angle: {steering_angle}")
 
+            left_motor_speed = speed + steering_angle              # Calculate motor speeds based on joystick inputs
+            right_motor_speed = speed - steering_angle
 
-            # Calculate motor speeds based on joystick inputs
-            if speed != 0:
-                left_motor_speed = speed * (1 - abs(steering_angle)) + steering_angle * speed
-                right_motor_speed = speed * (1 - abs(steering_angle)) - steering_angle * speed
-            else:
-                left_motor_speed = steering_angle
-                right_motor_speed = -steering_angle
-
-            left_motor_speed = max(min(left_motor_speed, 1.0), -1.0)
+            left_motor_speed = max(min(left_motor_speed, 1.0), -1.0)    # Capping Motor-Speed at -1 and 1 
             right_motor_speed = max(min(right_motor_speed, 1.0), -1.0)
 
-            set_motor_speeds(left_motor_speed, right_motor_speed)  # Transmit speeds to HBridge Module
-
-            # Normalize speeds to maintain consistent total speed
-            #max_speed = max(abs(left_motor_speed), abs(right_motor_speed))
-            #if max_speed > 1.0:
-            #    left_motor_speed /= max_speed
-            #    right_motor_speed /= max_speed
-
-            #set_motor_speeds(left_motor_speed, right_motor_speed)  # Transmit speeds to HBridge Module
-
-            #left_motor_speed = speed + steering_angle              # Calculate motor speeds based on joystick inputs
-            #right_motor_speed = speed - steering_angle
-
-            #left_motor_speed = max(min(left_motor_speed, 1.0), -1.0)    # Capping Motor-Speed at -1 and 1 
-            #right_motor_speed = max(min(right_motor_speed, 1.0), -1.0)
-
-            #set_motor_speeds(left_motor_speed, right_motor_speed)       # Transmit speeds to HBridge Module
+            set_motor_speeds(left_motor_speed, right_motor_speed)       # Transmit speeds to HBridge Module
             print(f"RightSpeed: {right_motor_speed}") 
             print(f"LeftSpeed: {left_motor_speed}") 
 
