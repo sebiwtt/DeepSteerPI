@@ -21,8 +21,7 @@ csv_writer.writerow(['timestamp', 'image_path', 'left_speed', 'right_speed', 'st
 
 # Initialize variables
 collecting_data = False
-left_speed = 0
-right_speed = 0
+speed = 0
 steering_angle = 0
 running = True
 #camera = PiCamera()
@@ -59,7 +58,7 @@ try:
 
             left_motor_speed = max(min(left_motor_speed, 1.0), -1.0)    # Capping Motor-Speed at -1 and 1 
             right_motor_speed = max(min(right_motor_speed, 1.0), -1.0)
-            
+
             set_motor_speeds(left_motor_speed, right_motor_speed)       # Transmit speeds to HBridge Module
 
             # Capture and save image, write log-data to csv
