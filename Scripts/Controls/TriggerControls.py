@@ -28,8 +28,7 @@ def collect_data():
 
 def normalize_trigger(value):
     normalized_value = value / 255.0
-    if is_forward:
-        return normalized_value
+    return normalized_value
 
 def normalize(value):
     if value > 1:
