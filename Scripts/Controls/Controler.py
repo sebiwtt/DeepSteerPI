@@ -85,11 +85,6 @@ def get_gamepad_data(last_left_trigger, last_right_trigger):
  
     return left_trigger_value, right_trigger_value, left_joystick_x
 
-def control_robot():
-    
-
-    
-
 #---------- MAIN Program ----------
 
 if not os.path.exists('training_data'):
