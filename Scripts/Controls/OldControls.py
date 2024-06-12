@@ -61,6 +61,21 @@ config = picam2.create_still_configuration()
 picam2.configure(config)
 picam2.start()
 
+def collect_data():
+    global collecting_data
+    while running:
+        if collecting_data:
+            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S%f')
+            image_path = f'training_data/{timestamp}.jpg'
+            picam2.capture_file(image_path)
+            csv_writer.writerow([timestamp, image_path, speed, steering_angle])
+            time.sleep(0.1)  # Adjust the sleep duration as necessary
+        else:
+            time.sleep(0.01)
+
+data_collection_thread = threading.Thread(target=collect_data)
+data_collection_thread.start()
+
 try:
     while running:
         events = get_gamepad()
@@ -103,6 +118,7 @@ except KeyboardInterrupt:
     print("Data collection interrupted")
     
 finally:
+    data_collection_thread.join()
     HBridge.setMotorLeft(0)
     HBridge.setMotorRight(0)
     HBridge.exit()
