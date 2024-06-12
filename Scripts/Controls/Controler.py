@@ -48,7 +48,7 @@ def set_motor_speeds(left_speed, right_speed):
     HBridge.setMotorLeft(left_speed)
     HBridge.setMotorRight(right_speed)
 
-def get_gamepad_data(last_left_trigger=0, last_right_trigger=0):
+def get_gamepad_data(last_left_trigger, last_right_trigger):
     events = get_gamepad()
     left_trigger_value = last_left_trigger
     right_trigger_value = last_right_trigger
@@ -86,41 +86,9 @@ def get_gamepad_data(last_left_trigger=0, last_right_trigger=0):
     return left_trigger_value, right_trigger_value, left_joystick_x
 
 def control_robot():
-    last_left_trigger = 0
-    last_right_trigger = 0
+    
 
-    left_trigger, right_trigger, left_joystick_x = get_gamepad_data(last_left_trigger, last_right_trigger)
-
-    # Update the last known trigger values
-    last_left_trigger = left_trigger
-    last_right_trigger = right_trigger
-
-    # Ensure both triggers are not pressed simultaneously
-    if left_trigger != 0 and right_trigger != 0:
-        base_speed = 0
-    else:
-        base_speed = left_trigger + right_trigger
-
-    # Calculate the steering adjustment
-    steering_adjustment = left_joystick_x * 0.5  # Scale steering
-
-    # Calculate the motor speeds
-    left_motor_speed = base_speed + steering_adjustment
-    right_motor_speed = base_speed - steering_adjustment
-
-    # Normalize motor speeds to be within -1 to 1
-    left_motor_speed = max(min(left_motor_speed, 1), -1)
-    right_motor_speed = max(min(right_motor_speed, 1), -1)
-
-    print(f'Left Motor: {left_motor_speed}, Right Motor: {right_motor_speed}')
-
-
-    # Set the motor speeds using the HBridge interface
-    #set_motor_speeds(left_motor_speed, right_motor_speed)
-
-    # For debugging purposes
-    #print(f'Base Speed: {base_speed}, Steering: {left_joystick_x}')
-    #print(f'Left Motor: {left_motor_speed}, Right Motor: {right_motor_speed}')
+    
 
 #---------- MAIN Program ----------
 
@@ -137,8 +105,43 @@ picam2.configure(config)
 picam2.start()
 
 try:
+    last_left_trigger = 0
+    last_right_trigger = 0
+
     while running:
-        control_robot()
+        
+        left_trigger, right_trigger, left_joystick_x = get_gamepad_data(last_left_trigger, last_right_trigger)
+
+        # Update the last known trigger values
+        last_left_trigger = left_trigger
+        last_right_trigger = right_trigger
+
+        # Ensure both triggers are not pressed simultaneously
+        if left_trigger != 0 and right_trigger != 0:
+            base_speed = 0
+        else:
+            base_speed = left_trigger + right_trigger
+
+        # Calculate the steering adjustment
+        steering_adjustment = left_joystick_x * 0.5  # Scale steering
+
+        # Calculate the motor speeds
+        left_motor_speed = base_speed + steering_adjustment
+        right_motor_speed = base_speed - steering_adjustment
+
+        # Normalize motor speeds to be within -1 to 1
+        left_motor_speed = max(min(left_motor_speed, 1), -1)
+        right_motor_speed = max(min(right_motor_speed, 1), -1)
+
+        print(f'Left Motor: {left_motor_speed}, Right Motor: {right_motor_speed}')
+
+
+        # Set the motor speeds using the HBridge interface
+        #set_motor_speeds(left_motor_speed, right_motor_speed)
+
+        # For debugging purposes
+        #print(f'Base Speed: {base_speed}, Steering: {left_joystick_x}')
+        #print(f'Left Motor: {left_motor_speed}, Right Motor: {right_motor_speed}')
 
         if collecting_data:
             collect_data()
