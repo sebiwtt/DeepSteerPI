@@ -23,7 +23,7 @@ def collect_data():
     image_path = f'training_data/{timestamp}.jpg'
     picam2.capture_file(image_path)
     print(f"Saved image under {image_path}")
-    csv_writer.writerow([timestamp, image_path, left_stick, right_stick])
+    #csv_writer.writerow([timestamp, image_path, left_stick, right_stick])
     time.sleep(0.1)  # Adjust the sleep duration as necessary 
 
 def normalize_joystick(value):
