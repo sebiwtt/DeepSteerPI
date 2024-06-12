@@ -48,10 +48,10 @@ def set_motor_speeds(left_speed, right_speed):
     HBridge.setMotorLeft(left_speed)
     HBridge.setMotorRight(right_speed)
 
-def get_gamepad_data():
+def get_gamepad_data(last_left_trigger=0, last_right_trigger=0)::
     events = get_gamepad()
-    left_trigger_value = 0
-    right_trigger_value = 0
+    left_trigger_value = last_left_trigger
+    right_trigger_value = last_right_trigger
     left_joystick_x = 0
 
     for event in events:
@@ -86,7 +86,14 @@ def get_gamepad_data():
     return left_trigger_value, right_trigger_value, left_joystick_x
 
 def control_robot():
-    left_trigger, right_trigger, left_joystick_x = get_gamepad_data()
+    last_left_trigger = 0
+    last_right_trigger = 0
+
+    left_trigger, right_trigger, left_joystick_x = get_gamepad_data(last_left_trigger, last_right_trigger)
+
+    # Update the last known trigger values
+    last_left_trigger = left_trigger
+    last_right_trigger = right_trigger
 
     # Ensure both triggers are not pressed simultaneously
     if left_trigger != 0 and right_trigger != 0:
