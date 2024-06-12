@@ -69,7 +69,7 @@ def get_gamepad_data():
 
         if event.ev_type == 'Absolute':
 
-            elif event.code == 'ABS_Z':  # Left trigger
+            if event.code == 'ABS_Z':  # Left trigger
                 left_trigger_value = normalize_trigger(event.state, False)
                 #print(left_trigger_value)
 
