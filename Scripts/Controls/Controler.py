@@ -3,7 +3,7 @@ import csv
 import time
 from inputs import get_gamepad
 from datetime import datetime
-from picamera import PiCamera
+#from picamera import PiCamera
 import L298NHBridge as HBridge
 
 # Helper to make talking to the motors easy
@@ -24,15 +24,15 @@ collecting_data = False
 left_speed = 0
 right_speed = 0
 steering_angle = 0
-camera = PiCamera()
-camera.resolution = (640, 480)
+#camera = PiCamera()
+#camera.resolution = (640, 480)
 
 try:
     while True:
         events = get_gamepad()
         for event in events:
             if event.ev_type == "Key" and event.code == "BTN_SOUTH" and event.state == 1:  # X-Button
-                collecting_data = not collecting_data
+                #collecting_data = not collecting_data
                 if collecting_data:
                     print("Data collection started")
                 else:
@@ -70,5 +70,5 @@ finally:
     HBridge.setMotorLeft(0)
     HBridge.setMotorRight(0)
     HBridge.exit()
-    camera.close()
+    #camera.close()
     csv_file.close()
