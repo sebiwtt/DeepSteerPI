@@ -24,11 +24,12 @@ collecting_data = False
 left_speed = 0
 right_speed = 0
 steering_angle = 0
+running = True
 #camera = PiCamera()
 #camera.resolution = (640, 480)
 
 try:
-    while True:
+    while running:
         events = get_gamepad()
         for event in events:
             if event.ev_type == "Key" and event.code == "BTN_SOUTH" and event.state == 1:  # X-Button
@@ -39,23 +40,26 @@ try:
                     print("Data collection stopped")
 
             elif event.ev_type == "Key" and event.code == "BTN_WEST" and event.state == 1: # Square-Button
-                break
+                running = False
             
             if event.ev_type == "Absolute":
-                #print("ABS")
+
                 if event.code == "ABS_Y": 
                     print(event.code)                       # Left joystick vertical
                     print(event.state)
-                    left_speed = -event.state / 32767       
+                    speed = -event.state / 32767   
+
                 elif event.code == "ABS_X":                 # Right joystick horizontal
                     print(event.code)                
                     print(event.state)
                     steering_angle = event.state / 32767   
 
-            left_motor_speed = left_speed + steering_angle              # Calculate motor speeds based on joystick inputs
-            right_motor_speed = left_speed - steering_angle
+            left_motor_speed = speed + steering_angle              # Calculate motor speeds based on joystick inputs
+            right_motor_speed = speed - steering_angle
+
             left_motor_speed = max(min(left_motor_speed, 1.0), -1.0)    # Capping Motor-Speed at -1 and 1 
             right_motor_speed = max(min(right_motor_speed, 1.0), -1.0)
+            
             set_motor_speeds(left_motor_speed, right_motor_speed)       # Transmit speeds to HBridge Module
 
             # Capture and save image, write log-data to csv
