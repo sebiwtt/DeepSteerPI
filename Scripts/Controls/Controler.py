@@ -69,12 +69,15 @@ def get_gamepad_data():
 
             if event.code == 'ABS_Z':  # Left trigger
                 left_trigger_value = normalize_trigger(event.state, False)
+                print(left_trigger_value)
 
             elif event.code == 'ABS_RZ':  # Right trigger
                 right_trigger_value = normalize_trigger(event.state, True)
+                print(right_trigger_value)
 
             elif event.code == 'ABS_X':  # Left joystick X axis
                 left_joystick_x = normalize_joystick(event.state)
+                print(left_joystick_x)
  
     return left_trigger_value, right_trigger_value, left_joystick_x
 
@@ -102,8 +105,8 @@ def control_robot():
     set_motor_speeds(left_motor_speed, right_motor_speed)
 
     # For debugging purposes
-    print(f'Base Speed: {base_speed}, Steering: {left_joystick_x}')
-    print(f'Left Motor: {left_motor_speed}, Right Motor: {right_motor_speed}')
+    #print(f'Base Speed: {base_speed}, Steering: {left_joystick_x}')
+    #print(f'Left Motor: {left_motor_speed}, Right Motor: {right_motor_speed}')
 
 #---------- MAIN Program ----------
 
