@@ -43,8 +43,7 @@ try:
             
             if event.ev_type == "Absolute":
 
-                if event.code == "ABS_Y": 
-                    if event.code == "ABS_Y":                 
+                if event.code == "ABS_Y":        
                     speed = -(event.state - 128) / 127   # Normalize to range [-1, 1]
                     print(f"Speed: {speed}") 
 
