@@ -6,6 +6,14 @@ from datetime import datetime
 from picamera2 import Picamera2, Preview
 import L298NHBridge as HBridge
 
+def normalize(value):
+    if value > 1:
+        return 1
+    elif value < -1:
+        return -1
+    else:
+        return value
+
 def set_motor_speeds(left_speed, right_speed):
     HBridge.setMotorLeft(left_speed)
     HBridge.setMotorRight(right_speed)
