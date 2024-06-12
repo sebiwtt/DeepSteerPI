@@ -21,7 +21,7 @@ def stop_motors():
 def collect_data():
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S%f')
     image_path = f'training_data/{timestamp}.jpg'
-    picam2.capture_file(image_path)
+    #picam2.capture_file(image_path)
     print(f"Saved image under {image_path}")
     #csv_writer.writerow([timestamp, image_path, left_stick, right_stick])
     #time.sleep(0.1)  # Adjust the sleep duration as necessary 
