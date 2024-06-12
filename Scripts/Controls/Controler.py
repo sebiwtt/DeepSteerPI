@@ -57,7 +57,7 @@ def get_gamepad_data():
     for event in events:
 
         if event.ev_type == "Key" and event.code == "BTN_SOUTH" and event.state == 1:  # X-Button
-                collecting_data = not collecting_data
+                global collecting_data = not global collecting_data
                 if collecting_data:
                     print("Data collection started")
                 else:
@@ -65,7 +65,7 @@ def get_gamepad_data():
 
         elif event.ev_type == "Key" and event.code == "BTN_WEST" and event.state == 1: # Square-Button
             print("Exiting") 
-            running = False
+            global running = False
 
         if event.ev_type == 'Absolute':
 
