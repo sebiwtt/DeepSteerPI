@@ -48,11 +48,11 @@ def set_motor_speeds(left_speed, right_speed):
     HBridge.setMotorLeft(left_speed)
     HBridge.setMotorRight(right_speed)
 
-def get_gamepad_data(last_left_trigger, last_right_trigger):
+def get_gamepad_data(last_left_trigger, last_right_trigger, last_joystick_x):
     events = get_gamepad()
     left_trigger_value = last_left_trigger
     right_trigger_value = last_right_trigger
-    left_joystick_x = 0
+    left_joystick_x = last_joystick_x
 
     for event in events:
 
@@ -102,14 +102,16 @@ picam2.start()
 try:
     last_left_trigger = 0
     last_right_trigger = 0
+    last_joystick_x = 0
 
     while running:
         
-        left_trigger, right_trigger, left_joystick_x = get_gamepad_data(last_left_trigger, last_right_trigger)
+        left_trigger, right_trigger, left_joystick_x = get_gamepad_data(last_left_trigger, last_right_trigger, last_joystick_x)
 
         # Update the last known trigger values
         last_left_trigger = left_trigger
         last_right_trigger = right_trigger
+        last_joystick_x = left_joystick_x
 
         # Ensure both triggers are not pressed simultaneously
         if left_trigger != 0 and right_trigger != 0:
