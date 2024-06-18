@@ -7,6 +7,8 @@ from datetime import datetime
 from picamera2 import Picamera2, Preview
 import L298NHBridge as HBridge
 
+#--------- Helper Functions ---------
+
 def normalize(value):
     if value > 1:
         return 1
@@ -39,37 +41,46 @@ def control_robot(left_stick, right_stick):
 
     set_motor_speeds(left_motor_speed, right_motor_speed)
 
-if not os.path.exists('training_data'):
-    os.makedirs('training_data')
-
-csv_file = open('training_data/data_log.csv', 'w', newline='')
-csv_writer = csv.writer(csv_file)
-csv_writer.writerow(['timestamp', 'image_path', 'left_speed', 'right_speed', 'steering_angle'])
-
-collecting_data = False
-left_stick = 0
-right_stick = 0
-running = True
-
-picam2 = Picamera2()
-config = picam2.create_still_configuration()
-picam2.configure(config)
-picam2.start()
-
 def collect_data():
     global collecting_data
     global running
+    global controller_state
     while running:
-        print("thraed running")
         if collecting_data:
             timestamp = datetime.now().strftime('%Y%m%d_%H%M%S%f')
             image_path = f'training_data/{timestamp}.jpg'
             picam2.capture_file(image_path)
             print(f'Captured image: {image_path}')
-            #csv_writer.writerow([timestamp, image_path, speed, steering_angle])
+            csv_writer.writerow([timestamp, image_path, controller_state['left_stick'], controller_state['right_stick']])
+            print(f'Wrote data to csv file: {timestamp}, {image_path}, {controller_state["left_stick"]}, {controller_state["right_stick"]}')
             time.sleep(0.1) 
         else:
             time.sleep(0.01)
+
+#--------- Global Variables ---------
+
+collecting_data = False
+running = True
+left_stick = 0
+right_stick = 0
+controller_state = {
+    'left_stick': 0,
+    'right_stick': 0
+}
+
+#----------- Main Program -----------
+
+if not os.path.exists('training_data'):
+    os.makedirs('training_data')
+
+csv_file = open('training_data/data_log.csv', 'w', newline='')
+csv_writer = csv.writer(csv_file)
+csv_writer.writerow(['timestamp', 'image_path', 'left_stick', 'right_stick'])
+
+picam2 = Picamera2()
+config = picam2.create_still_configuration(main={"size": (1920, 1080)})
+picam2.configure(config)
+picam2.start()
 
 data_collection_thread = threading.Thread(target=collect_data)
 data_collection_thread.start()
@@ -90,11 +101,11 @@ try:
             
             if event.ev_type == "Absolute":
 
-                if event.code == "ABS_Y":        
-                    left_stick = -(event.state - 128) / 127   # Normalize to range [-1, 1]
+                if event.code == "ABS_Y":         
+                    controller_state['left_stick'] = -(event.state - 128) / 127
 
                 elif event.code == "ABS_RX":                
-                    right_stick = (event.state - 128) / 127  # Normalize to range [-1, 1]
+                    controller_state['right_stick'] = (event.state - 128) / 127
 
                 elif event.code == 'ABS_Z':  # Left trigger
                     print(f'Left Trigger: {event.state}')
@@ -102,7 +113,7 @@ try:
                 elif event.code == 'ABS_RZ':  # Right trigger
                     print(f'Right Trigger: {event.state}')
 
-            control_robot(left_stick, right_stick) 
+            control_robot(controller_state['left_stick'], controller_state['right_stick']) 
 
 except KeyboardInterrupt:
     print("Data collection interrupted")
