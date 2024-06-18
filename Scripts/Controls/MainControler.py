@@ -91,10 +91,8 @@ csv_writer = csv.writer(csv_file)
 csv_writer.writerow(['timestamp', 'image_path', 'left_stick', 'right_stick'])
 
 picam2 = Picamera2()
-#config = picam2.create_still_configuration()
-#config = picam2.create_still_configuration(main={"size": (1920, 1080)}, controls={"ExposureTime": 10000, "AnalogueGain": 2.0})
 config = picam2.create_still_configuration(
-    main={"size": (3280, 2464)},  # Set to max resolution for Camera Module v2
+    main={"size": (1920, 1080)},
     controls={"ExposureTime": 10000, "AnalogueGain": 2.0},
 )
 picam2.configure(config)
