@@ -58,9 +58,9 @@ def collect_data():
             timestamp = datetime.now().strftime('%Y%m%d_%H%M%S%f')
             image_path = f'training_data/{timestamp}.jpg'
             picam2.capture_file(image_path)
-            print(f'Captured image: {image_path}')
+            #print(f'Captured image: {image_path}')
             csv_writer.writerow([timestamp, image_path, controller_state['left_stick'], controller_state['right_stick']])
-            print(f'Wrote data to csv file: {timestamp}, {image_path}, {controller_state["left_stick"]}, {controller_state["right_stick"]}')
+            #print(f'Wrote data to csv file: {timestamp}, {image_path}, {controller_state["left_stick"]}, {controller_state["right_stick"]}')
             time.sleep(0.1) 
         else:
             time.sleep(0.01)
@@ -91,8 +91,9 @@ csv_writer = csv.writer(csv_file)
 csv_writer.writerow(['timestamp', 'image_path', 'left_stick', 'right_stick'])
 
 picam2 = Picamera2()
+
 config = picam2.create_still_configuration(
-    main={"size": (1920, 1080)},
+    main={"size": (3280, 2464)},
     controls={"ExposureTime": 10000, "AnalogueGain": 2.0},
 )
 picam2.configure(config)
@@ -123,12 +124,6 @@ try:
 
                 elif event.code == "ABS_RX":                
                     controller_state['right_stick'] = (event.state - 128) / 127
-
-                elif event.code == 'ABS_Z':  # Left trigger
-                    print(f'Left Trigger: {event.state}')
-
-                elif event.code == 'ABS_RZ':  # Right trigger
-                    print(f'Right Trigger: {event.state}')
 
             control_robot(controller_state['left_stick'], controller_state['right_stick']) 
 
