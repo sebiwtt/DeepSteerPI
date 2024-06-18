@@ -78,7 +78,7 @@ csv_writer = csv.writer(csv_file)
 csv_writer.writerow(['timestamp', 'image_path', 'left_stick', 'right_stick'])
 
 picam2 = Picamera2()
-config = picam2.create_still_configuration(main={"size": (1920, 1080)})
+config = picam2.create_still_configuration()
 picam2.configure(config)
 picam2.start()
 
