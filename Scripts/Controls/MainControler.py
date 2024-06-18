@@ -60,11 +60,12 @@ def collect_data():
     global collecting_data
     global running
     while running:
-        print("thred running")
+        print("thraed running")
         if collecting_data:
             timestamp = datetime.now().strftime('%Y%m%d_%H%M%S%f')
             image_path = f'training_data/{timestamp}.jpg'
             picam2.capture_file(image_path)
+            print(f'Captured image: {image_path}')
             #csv_writer.writerow([timestamp, image_path, speed, steering_angle])
             time.sleep(0.1) 
         else:
