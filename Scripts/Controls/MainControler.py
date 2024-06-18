@@ -20,29 +20,23 @@ def set_motor_speeds(left_speed, right_speed):
     HBridge.setMotorRight(right_speed)
 
 def control_robot(left_stick, right_stick):
-    # Define dead zone
     dead_zone = 0.1
     
-    # Apply dead zone
     if abs(left_stick) < dead_zone:
         left_stick = 0
     if abs(right_stick) < dead_zone:
         right_stick = 0
 
-    # Exponential response for precision control
     exponent = 2
     left_stick = left_stick ** exponent if left_stick >= 0 else -(abs(left_stick) ** exponent)
     right_stick = right_stick ** exponent if right_stick >= 0 else -(abs(right_stick) ** exponent)
 
-    # Calculate the raw motor speeds
     left_motor_speed = left_stick + right_stick
     right_motor_speed = left_stick - right_stick
 
-    # Normalize the motor speeds
     left_motor_speed = normalize(left_motor_speed)
     right_motor_speed = normalize(right_motor_speed)
 
-    # Set the motor speeds using the HBridge interface
     set_motor_speeds(left_motor_speed, right_motor_speed)
 
 if not os.path.exists('training_data'):
@@ -64,13 +58,15 @@ picam2.start()
 
 def collect_data():
     global collecting_data
+    global running
     while running:
+        print("thred running")
         if collecting_data:
             timestamp = datetime.now().strftime('%Y%m%d_%H%M%S%f')
             image_path = f'training_data/{timestamp}.jpg'
             picam2.capture_file(image_path)
             #csv_writer.writerow([timestamp, image_path, speed, steering_angle])
-            time.sleep(0.1)  # Adjust the sleep duration as necessary
+            time.sleep(0.1) 
         else:
             time.sleep(0.01)
 
@@ -106,14 +102,6 @@ try:
                     print(f'Right Trigger: {event.state}')
 
             control_robot(left_stick, right_stick) 
-
-            if collecting_data:
-                timestamp = datetime.now().strftime('%Y%m%d_%H%M%S%f')
-                image_path = f'training_data/{timestamp}.jpg'
-                picam2.capture_file(image_path)
-                print(f"Saved image under {image_path}")
-                csv_writer.writerow([timestamp, image_path, left_stick, right_stick])
-                time.sleep(0.1)  # Adjust the sleep duration as necessary 
 
 except KeyboardInterrupt:
     print("Data collection interrupted")
