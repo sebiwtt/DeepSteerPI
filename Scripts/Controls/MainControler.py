@@ -96,10 +96,6 @@ picam2 = Picamera2()
 config = picam2.create_still_configuration(
     main={"size": (3280, 2464)},  # Set to max resolution for Camera Module v2
     controls={"ExposureTime": 10000, "AnalogueGain": 2.0},
-    # Adjust zoom to change the cropping area (software FOV adjustment)
-    # This is optional and might not be necessary for a wider lens.
-    # Adjust the values as necessary (1.0 means no zoom)
-    transform={"zoom": (0.0, 0.0, 1.0, 1.0)}
 )
 picam2.configure(config)
 picam2.start()
