@@ -6,6 +6,7 @@ import threading
 from datetime import datetime
 from picamera2 import Picamera2, Preview
 import L298NHBridge as HBridge
+import shutil
 
 #--------- Helper Functions ---------
 
@@ -47,6 +48,13 @@ def collect_data():
     global controller_state
     while running:
         if collecting_data:
+
+            free_space = check_disk_space()
+            if free_space < disk_space_threshold:
+                print("Low disk space. Stopping data collection.")
+                collecting_data = False
+                continue
+
             timestamp = datetime.now().strftime('%Y%m%d_%H%M%S%f')
             image_path = f'training_data/{timestamp}.jpg'
             picam2.capture_file(image_path)
@@ -56,6 +64,10 @@ def collect_data():
             time.sleep(0.1) 
         else:
             time.sleep(0.01)
+
+def check_disk_space():
+    total, used, free = shutil.disk_usage("/")
+    return free
 
 #--------- Global Variables ---------
 
@@ -73,14 +85,25 @@ controller_state = {
 if not os.path.exists('training_data'):
     os.makedirs('training_data')
 
+disk_space_threshold = 100 * 1024 * 1024 
 csv_file = open('training_data/data_log.csv', 'w', newline='')
 csv_writer = csv.writer(csv_file)
 csv_writer.writerow(['timestamp', 'image_path', 'left_stick', 'right_stick'])
 
 picam2 = Picamera2()
-config = picam2.create_still_configuration()
+#config = picam2.create_still_configuration()
+#config = picam2.create_still_configuration(main={"size": (1920, 1080)}, controls={"ExposureTime": 10000, "AnalogueGain": 2.0})
+config = picam2.create_still_configuration(
+    main={"size": (3280, 2464)},  # Set to max resolution for Camera Module v2
+    controls={"ExposureTime": 10000, "AnalogueGain": 2.0},
+    # Adjust zoom to change the cropping area (software FOV adjustment)
+    # This is optional and might not be necessary for a wider lens.
+    # Adjust the values as necessary (1.0 means no zoom)
+    transform={"zoom": (0.0, 0.0, 1.0, 1.0)}
+)
 picam2.configure(config)
 picam2.start()
+
 
 data_collection_thread = threading.Thread(target=collect_data)
 data_collection_thread.start()
