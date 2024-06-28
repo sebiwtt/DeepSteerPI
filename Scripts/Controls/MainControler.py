@@ -69,10 +69,17 @@ def collect_data():
 
             # --------
 
-            stream = io.BytesIO()
-            picam2.capture_file(stream, format='jpeg')
-            stream.seek(0)
-            image = Image.open(stream)
+            #stream = io.BytesIO()
+            #picam2.capture_file(stream, format='jpeg')
+            #stream.seek(0)
+            #image = Image.open(stream)
+            #image = image.resize((820,616))
+            #image.save(image_path, format='JPEG', quality=85)
+
+            # --------
+
+            image_array = picam2.capture_array()
+            image = Image.fromarray(image_array)
             image = image.resize((820,616))
             image.save(image_path, format='JPEG', quality=85)
 
@@ -124,6 +131,7 @@ picam2 = Picamera2()
 config = picam2.create_still_configuration(
     main={"size": (3280, 2464)},
     controls={"ExposureTime": 10000, "AnalogueGain": 2.0},
+    buffer_count=1
 )
 picam2.configure(config)
 picam2.start()
