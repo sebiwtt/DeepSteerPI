@@ -82,12 +82,11 @@ def check_disk_space():
 LED_PATH = "/sys/class/leds/ACT/brightness"
 
 def led_on():
-    with open(LED_PATH, "w") as f:
-        f.write("1")
+    os.system(f'echo 1 | sudo tee {LED_PATH} > /dev/null')
 
 def led_off():
-    with open(LED_PATH, "w") as f:
-        f.write("0")
+    os.system(f'echo 0 | sudo tee {LED_PATH} > /dev/null')
+
 
 #--------- Global Variables ---------
 
