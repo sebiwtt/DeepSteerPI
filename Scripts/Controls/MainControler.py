@@ -61,7 +61,7 @@ def collect_data():
             image_path = f'training_data/{timestamp}.jpg'
             temp_image_path = "training_data/temp.jpg"
             
-            #picam2.capture_file(temp_image_path)
+            picam2.capture_file(image_path)
 
             #image = Image.open(temp_image_path)
             #image = image.resize((820,616))
@@ -69,29 +69,19 @@ def collect_data():
 
             # --------
 
-            stream = io.BytesIO()
-
-            # Capture the image to the stream
-            picam2.capture_file(stream, format='jpeg')
-
-            # Move the stream position to the start
-            stream.seek(0)
-
-            # Open the image using PIL
-            image = Image.open(stream)
-
-            # Resize the image
-            image = image.resize((820,616))
-
-            # Save the resized image to the specified output path
-            image.save(image_path, format='JPEG', quality=85)
+            #stream = io.BytesIO()
+            #picam2.capture_file(stream, format='jpeg')
+            #stream.seek(0)
+            #image = Image.open(stream)
+            #image = image.resize((820,616))
+            #image.save(image_path, format='JPEG', quality=85)
 
             # --------
 
             print(f'Captured image: {image_path}')
             csv_writer.writerow([timestamp, image_path, controller_state['left_stick'], controller_state['right_stick']])
             #print(f'Wrote data to csv file: {timestamp}, {image_path}, {controller_state["left_stick"]}, {controller_state["right_stick"]}')
-            time.sleep(0.01) 
+            time.sleep(0.001) 
         else:
             time.sleep(0.01)
 
