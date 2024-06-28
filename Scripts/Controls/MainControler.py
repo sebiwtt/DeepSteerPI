@@ -62,9 +62,9 @@ def collect_data():
 
             image_path = f'training_data/{timestamp}.jpg'
 
-            #image = Image.open(temp_image_path)
-            #image = image.resize((820,616))
-            #image.save(image_path, format="JPEG", quality=85)
+            image = Image.open(temp_image_path)
+            image = image.resize((820,616))
+            image.save(image_path, format="JPEG", quality=85)
 
             #os.remove(temp_image_path)
 
