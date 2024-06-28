@@ -121,6 +121,8 @@ controller_state = {
 if not os.path.exists('training_data'):
     os.makedirs('training_data')
 
+os.chmod('training_data', 0o755)
+
 disk_space_threshold = 100 * 1024 * 1024 
 csv_file = open('training_data/data_log.csv', 'w', newline='')
 csv_writer = csv.writer(csv_file)
