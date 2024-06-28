@@ -8,6 +8,7 @@ from picamera2 import Picamera2, Preview
 import L298NHBridge as HBridge
 import shutil
 from PIL import Image
+import io
 
 #--------- Helper Functions ---------
 
@@ -57,16 +58,35 @@ def collect_data():
                 continue
 
             timestamp = datetime.now().strftime('%Y%m%d_%H%M%S%f')
-            temp_image_path = "training_data/temp.jpg"
-            picam2.capture_file(temp_image_path)
-
             image_path = f'training_data/{timestamp}.jpg'
+            temp_image_path = "training_data/temp.jpg"
+            
+            #picam2.capture_file(temp_image_path)
 
-            image = Image.open(temp_image_path)
+            #image = Image.open(temp_image_path)
+            #image = image.resize((820,616))
+            #image.save(image_path, format="JPEG", quality=85)
+
+            # --------
+
+            stream = io.BytesIO()
+
+            # Capture the image to the stream
+            picam2.capture(stream, format='jpeg')
+
+            # Move the stream position to the start
+            stream.seek(0)
+
+            # Open the image using PIL
+            image = Image.open(stream)
+
+            # Resize the image
             image = image.resize((820,616))
-            image.save(image_path, format="JPEG", quality=85)
 
-            #os.remove(temp_image_path)
+            # Save the resized image to the specified output path
+            image.save(image_path, format='JPEG', quality=85)
+
+            # --------
 
             print(f'Captured image: {image_path}')
             csv_writer.writerow([timestamp, image_path, controller_state['left_stick'], controller_state['right_stick']])
