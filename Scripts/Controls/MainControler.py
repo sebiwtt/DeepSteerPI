@@ -79,7 +79,7 @@ def check_disk_space():
     total, used, free = shutil.disk_usage("/")
     return free
 
-LED_PATH = "/sys/class/leds/led0/brightness"
+LED_PATH = "/sys/class/leds/ACT/brightness
 
 def led_on():
     with open(LED_PATH, "w") as f:
