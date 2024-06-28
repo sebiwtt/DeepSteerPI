@@ -60,7 +60,7 @@ def collect_data():
             temp_image_path = "training_data/temp.jpg"
             picam2.capture_file(temp_image_path)
 
-            #image_path = f'training_data/{timestamp}.jpg'
+            image_path = f'training_data/{timestamp}.jpg'
 
             #image = Image.open(temp_image_path)
             #image = image.resize((820,616))
