@@ -63,12 +63,12 @@ def collect_data():
             image_path = f'training_data/{timestamp}.jpg'
 
             image = Image.open(temp_image_path)
-            image = image.resize((820,616), Image.ANTIALIAS)
+            image = image.resize((820,616))
             image.save(image_path, format="JPEG", quality=85)
 
             os.remove(temp_image_path)
 
-            #print(f'Captured image: {image_path}')
+            print(f'Captured image: {image_path}')
             csv_writer.writerow([timestamp, image_path, controller_state['left_stick'], controller_state['right_stick']])
             #print(f'Wrote data to csv file: {timestamp}, {image_path}, {controller_state["left_stick"]}, {controller_state["right_stick"]}')
             time.sleep(0.1) 
