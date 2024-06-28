@@ -60,13 +60,13 @@ def collect_data():
             temp_image_path = "training_data/temp.jpg"
             picam2.capture_file(temp_image_path)
 
-            image_path = f'training_data/{timestamp}.jpg'
+            #image_path = f'training_data/{timestamp}.jpg'
 
-            image = Image.open(temp_image_path)
-            image = image.resize((820,616))
-            image.save(image_path, format="JPEG", quality=85)
+            #image = Image.open(temp_image_path)
+            #image = image.resize((820,616))
+            #image.save(image_path, format="JPEG", quality=85)
 
-            os.remove(temp_image_path)
+            #os.remove(temp_image_path)
 
             print(f'Captured image: {image_path}')
             csv_writer.writerow([timestamp, image_path, controller_state['left_stick'], controller_state['right_stick']])
