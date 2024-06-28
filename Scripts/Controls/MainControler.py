@@ -85,7 +85,7 @@ def collect_data():
 
             # --------
 
-            print(f'Captured image: {image_path}')
+            #print(f'Captured image: {image_path}')
             csv_writer.writerow([timestamp, image_path, controller_state['left_stick'], controller_state['right_stick']])
             #print(f'Wrote data to csv file: {timestamp}, {image_path}, {controller_state["left_stick"]}, {controller_state["right_stick"]}')
             time.sleep(0.001) 
