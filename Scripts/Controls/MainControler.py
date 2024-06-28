@@ -72,7 +72,7 @@ def collect_data():
             stream = io.BytesIO()
 
             # Capture the image to the stream
-            picam2.capture(stream, format='jpeg')
+            picam2.capture_file(stream, format='jpeg')
 
             # Move the stream position to the start
             stream.seek(0)
