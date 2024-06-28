@@ -61,20 +61,20 @@ def collect_data():
             image_path = f'training_data/{timestamp}.jpg'
             temp_image_path = "training_data/temp.jpg"
             
-            picam2.capture_file(temp_image_path)
+            #picam2.capture_file(temp_image_path)
 
-            image = Image.open(temp_image_path)
-            image = image.resize((820,616))
-            image.save(image_path, format="JPEG", quality=85)
+            #image = Image.open(temp_image_path)
+            #image = image.resize((820,616))
+            #image.save(image_path, format="JPEG", quality=85)
 
             # --------
 
-            #stream = io.BytesIO()
-            #picam2.capture_file(stream, format='jpeg')
-            #stream.seek(0)
-            #image = Image.open(stream)
-            #image = image.resize((820,616))
-            #image.save(image_path, format='JPEG', quality=85)
+            stream = io.BytesIO()
+            picam2.capture_file(stream, format='jpeg')
+            stream.seek(0)
+            image = Image.open(stream)
+            image = image.resize((820,616))
+            image.save(image_path, format='JPEG', quality=85)
 
             # --------
 
