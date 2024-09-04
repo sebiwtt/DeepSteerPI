@@ -1,6 +1,6 @@
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout, BatchNormalization, GlobalAveragePooling2D
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import pandas as pd
 import numpy as np
@@ -8,6 +8,8 @@ import os
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from PIL import Image
+import matplotlib.pyplot as plt
+from tensorflow.keras.layers import SeparableConv2D
 
 # Load the CSV file
 data = pd.read_csv('training_data/data_log.csv')
@@ -26,34 +28,42 @@ def preprocess_image(image_path):
     img = img / 255.0  # Normalize the image
     return img
 
+
 # Data generators
 def data_generator(data, batch_size, is_training):
     while True:
         batch_data = data.sample(batch_size)
         images = []
-        angles = []
+        right_stick_values = []
+        left_stick_values = []
         for index, row in batch_data.iterrows():
             image_path = row['image_path']
-            angle = row['steering_angle']
+            right_stick = row['right_stick']
+            left_stick = row['left_stick']
             image = preprocess_image(image_path)
             images.append(image)
-            angles.append(angle)
+            right_stick_values.append(right_stick)
+            left_stick_values.append(left_stick)
         
-        yield np.array(images), np.array(angles)
+        yield np.array(images), np.array([right_stick_values, left_stick_values]).T 
+
 
 train_generator = data_generator(train_data, BATCH_SIZE, True)
 val_generator = data_generator(val_data, BATCH_SIZE, False)
 
 model = Sequential([
-    Conv2D(32, (3, 3), activation='relu', input_shape=(IMG_HEIGHT, IMG_WIDTH, 3)),
+    SeparableConv2D(32, (3, 3), activation='relu', input_shape=(64, 64, 3)),
     MaxPooling2D((2, 2)),
-    Conv2D(64, (3, 3), activation='relu'),
+    
+    SeparableConv2D(64, (3, 3), activation='relu'),
     MaxPooling2D((2, 2)),
-    Conv2D(128, (3, 3), activation='relu'),
+    
+    SeparableConv2D(128, (3, 3), activation='relu'),
     MaxPooling2D((2, 2)),
+    
     Flatten(),
     Dense(256, activation='relu'),
-    Dense(1)  # Output layer for steering angle
+    Dense(2)  # Output layer
 ])
 
 model.compile(optimizer='adam', loss='mean_squared_error')
@@ -66,13 +76,23 @@ val_steps = len(val_data) // BATCH_SIZE
 history = model.fit(
     train_generator,
     steps_per_epoch=train_steps,
-    epochs=10,  # Adjust the number of epochs as needed
+    epochs=10, 
     validation_data=val_generator,
     validation_steps=val_steps
 )
 
-# Evaluate the model on the validation set
 val_loss = model.evaluate(val_generator, steps=val_steps)
 print(f'Validation Loss: {val_loss}')
 
-model.save('cnn_steering_model.h5')
+model.save('cnn_steering_model_9.0_10epochs.keras')
+
+# ----------- Visualization of Metrics -----------
+
+# Plot the training and validation loss
+plt.plot(history.history['loss'], label='Training Loss')
+plt.plot(history.history['val_loss'], label='Validation Loss')
+plt.title('Training and Validation Loss Over Epochs')
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+plt.legend()
+plt.show()
